@@ -125,7 +125,7 @@ if __name__ == '__main__':
   # This is a test for the ForecastClass
   
   # Define the path to the data file
-  FILE_PATH = r'C:\Users\tebne\OneDrive\Programming\Languages\Python\TebnetGithub\Class\EURAUD.ifx.csv'
+  FILE_PATH = r'/workspaces/vonNuemann/Forecast Generator/Class/EURAUD.ifx.csv'
   
   # Read the data from the file and drop any missing values
   data = pd.read_csv(FILE_PATH, sep = '\t')['<CLOSE>'].dropna()
@@ -136,13 +136,13 @@ if __name__ == '__main__':
   region_size = (1/10)*np.ptp(data)
   
   # Define the number of forecasts and the period
-  num = 10
+  num = 100
   period = 10
   
   # Create an instance of the ForecastClass
   instance = ForecastClass(data, initial_val)
   # Split the data based on the bounds
-  instance.BoundSplit(region_size)
+  instance.UniformSplit(region_size)
   # Generate the forecast
   Forecast = instance.GenerateForecast(num, period)
   

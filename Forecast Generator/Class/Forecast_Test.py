@@ -1,4 +1,3 @@
-# Import necessary libraries
 import numpy as np
 import pandas as pd
 import Modules.DataMod as DataMod 
@@ -6,7 +5,7 @@ import Forecast_Class as FC
 import matplotlib.pyplot as plt
 
 # Define the path to the data file
-FILE_PATH = r'C:\Users\tebne\OneDrive\Programming\Languages\Python\TebnetGithub\Class\EURAUD.ifx.csv'
+FILE_PATH = r'/workspaces/vonNuemann/Forecast Generator/Class/EURAUD.ifx.csv'
 
 # Read the data from the file and drop any missing values
 data = pd.read_csv(FILE_PATH, sep = '\t')['<CLOSE>'].dropna()
