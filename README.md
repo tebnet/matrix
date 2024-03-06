@@ -1,4 +1,4 @@
-# ForecastClass Repository README
+# Forecast Generator Repository README
 
 ## Overview
 
