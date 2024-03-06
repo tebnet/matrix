@@ -1,45 +1,115 @@
-ForecastClass and DataMod Modules
-Overview
-This repository contains two main components: the ForecastClass and the DataMod modules.
+# ForecastClass Repository README
 
-ForecastClass
-The ForecastClass is a Python class designed for generating forecasts from a given dataset and an initial value. It provides a flexible and customizable way to create forecasts using different methods and splitting strategies.
+## Overview
 
-The class includes the following methods:
+The ForecastClass is a Python class designed for generating forecasts based on a given dataset and initial value. This class utilizes various methods and splitting strategies to produce accurate forecasts. Below is a guide to help you understand the class and its methods.
 
-__init__(self, data, initial_val): This is the constructor for the ForecastClass. It initializes the class with the given data and initial value.
+## Installation
 
-MethodUsed(self, method_used = None, **kwargs): This method sets the method to be used for generating the forecast. If no method is provided, it defaults to the regionChange method from the DataMod module.
+Before using the ForecastClass, ensure you have the necessary libraries installed:
 
-BoundSplit(self, region_size, recursive_split = True): This method splits the data into regions bound (centered) on a given value. If both BoundSplit and UniformSplit methods are called, BoundSplit takes precedence.
+```bash
+pip install numpy pandas
+```
 
-UniformSplit(self, region_size, recursive_split = True): This method splits the data uniformly. If both BoundSplit and UniformSplit methods are called, UniformSplit takes precedence.
+Now you're ready to integrate and leverage the forecasting capabilities.
 
-GenerateForecast(self, num, period): This method generates a forecast based on the method used, the data, and the initial value. It returns a numpy array of the forecasted values.
+## Quick Start
 
-DataMod Module
-The DataMod module is a versatile tool that offers functionalities for comprehensive data analysis and modification. It provides a range of functions for exploring distributions, mapping regions, transforming data, and more.
+### Import Necessary Modules
 
-The module includes the following functions:
+```python
+import numpy as np
+import pandas as pd
+import DataMod
+from ForecastClass import ForecastClass
+```
 
-blitzDistr(data, dev_type=2, use_tend=True, return_type='conc distr'): This function calculates the distribution of data.
+### Set Global Variables
 
-diffFunction(data, n_order=1, axis=1, return_type='pos prob'): This function calculates differences of given data.
+Initialize data and initial value:
 
-regionChange(data, dynamic_change=True, use_prob=True, set_prob=0.5): This function calculates region changes of given data.
+```python
+data = pd.Series(np.random.randn(1000))
+initial_val = 0
+```
 
-genChange(method_data): This function generates a change based on method data.
+### Create an Instance of ForecastClass
 
-regionMap_pair(original_data, region_values=None, pair_data=False, pair_increment=1, return_type=1): This function maps original data to specified regions.
+```python
+forecast = ForecastClass(data, initial_val)
+```
 
-filterPair(data, order=None, filter_flag=False, pair=False, filterFunc=None, pair_index=1, axis_index=0): This function filters and pairs the data based on specified conditions.
+### Set the Method for Generating Forecast
 
-boundSplitFunc(data, value, region_size): This function splits the data based on specified value and region size.
+Choose a method for generating the forecast. If none is provided, it defaults to the `regionChange` method from the `DataMod` module:
 
-uniformSplitFunc(data, val, region_size): This function splits the data uniformly based on specified value and region size.
+```python
+forecast.MethodUsed(DataMod.regionChange, use_tend=True, dynamic_change=True)
+```
 
-Installation
-First, ensure you have the necessary libraries installed:
+### Split the Data into Regions (Bound Splitting)
 
-Usage
-Detailed usage instructions for both the ForecastClass and DataMod module are provided in the Quick Start section of this README. Examples are also provided to help you understand how to use these tools in your own projects.
+```python
+forecast.BoundSplit(10)
+```
+
+### Generate the Forecast
+
+```python
+forecast.GenerateForecast(10, 10)
+```
+
+## Methods
+
+### `init(self, data, initial_val)`
+
+The constructor for the ForecastClass. It initializes the class with the given data and initial value.
+
+### `MethodUsed(self, method_used=None, **kwargs)`
+
+Sets the method to be used for generating the forecast. If no method is provided, it defaults to the `regionChange` method from the `DataMod` module.
+
+### `BoundSplit(self, region_size, recursive_split=True)`
+
+Splits the data into regions bound (centered) on a given value. If both `BoundSplit` and `UniformSplit` methods are called, `BoundSplit` takes precedence.
+
+### `UniformSplit(self, region_size, recursive_split=True)`
+
+Splits the data uniformly. If both `BoundSplit` and `UniformSplit` methods are called, `UniformSplit` takes precedence.
+
+### `GenerateForecast(self, num, period)`
+
+Generates a forecast based on the method used, the data, and the initial value. It returns a numpy array of the forecasted values.
+
+## Usage
+
+This example generates a 10x10 numpy array of forecasted values based on the `regionChange` method from the `DataMod` module.
+
+```python
+# Import necessary modules
+import numpy as np
+import pandas as pd
+import DataMod
+from ForecastClass import ForecastClass
+
+# Initialize data and initial value
+data = pd.Series(np.random.randn(1000))
+initial_val = 0
+
+# Create an instance of ForecastClass
+forecast = ForecastClass(data, initial_val)
+
+# Set the method to be used for generating the forecast
+forecast.MethodUsed(DataMod.regionChange, use_tend=True, dynamic_change=True)
+
+# Split the data into regions bound on a given value
+forecast.BoundSplit(10)
+
+# Generate the forecast
+forecast.GenerateForecast(10, 10)
+```
+
+## Examples
+
+Explore detailed examples and usage scenarios in the module's functions and documentation. Effortlessly adapt these examples to suit your specific data analysis and modification needs. For more information, refer to the documentation in the respective modules.
