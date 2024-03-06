@@ -1,42 +1,81 @@
-ForecastClass
-The ForecastClass is a Python class that provides methods for generating forecasts based on a given dataset and initial value. The class uses different methods and splitting strategies to generate the forecast.
+# ForecastClass README
 
-Methods
-__init__(self, data, initial_val)
-The constructor for the ForecastClass. It initializes the class with the given data and initial value.
+## Overview
+The `ForecastClass` is a Python class designed for generating forecasts based on financial time series data. It provides methods for splitting the data into regions, selecting forecasting methods, and generating forecasts over a specified period.
 
-MethodUsed(self, method_used = None, **kwargs)
-This method sets the method to be used for generating the forecast. If no method is provided, it defaults to the regionChange method from the DataMod module.
+## Dependencies
+- `numpy` (imported as `np`): A powerful library for numerical operations.
+- `pandas` (imported as `pd`): A data manipulation library that provides data structures for efficient data analysis.
+- `logging`: A built-in Python module for logging messages.
+- `Modules.DataMod` (imported as `DataMod`): A custom module containing functions for data manipulation.
 
-BoundSplit(self, region_size, recursive_split = True)
-This method splits the data into regions bound (centered) on a given value. If both BoundSplit and UniformSplit methods are called, BoundSplit takes precedence.
+## Class Attributes
+- `DEFAULT_DEV_TYPE`: Default development type used in the forecast.
+- `DEFAULT_SET_PROB`: Default set probability used in the forecast.
 
-UniformSplit(self, region_size, recursive_split = True)
-This method splits the data uniformly. If both BoundSplit and UniformSplit methods are called, UniformSplit takes precedence.
+## Class Methods
 
-GenerateForecast(self, num, period)
-This method generates a forecast based on the method used, the data, and the initial value. It returns a numpy array of the forecasted values.
+### `__init__(self, data, initial_val)`
+- Initializes the `ForecastClass` object with input time series data and an initial value.
 
-Usage
-This will generate a 10x10 numpy array of forecasted values based on the regionChange method from the DataMod module.
+### `MethodUsed(self, method_used=None, **kwargs)`
+- Sets the method to be used for generating the forecast, along with optional method-specific arguments.
 
-# Import necessary modules
-import numpy as np 
+### `BoundSplit(self, region_size, recursive_split=True)`
+- Splits the data into regions bound(centred) on a given value, using the specified region size. Optionally, the split can be recursive.
+
+### `UniformSplit(self, region_size, recursive_split=True)`
+- Splits the data uniformly using the specified region size. Optionally, the split can be recursive.
+
+### `GenerateForecast(self, num, period)`
+- Generates a forecast based on the selected method, the data, and the initial value. The number of forecasts (`num`) and the forecast period (`period`) are specified as parameters.
+
+## Usage
+
+```python
+# Example usage of the ForecastClass
+
+# Import necessary libraries
+import numpy as np
 import pandas as pd
-import DataMod
+import logging
+import Modules.DataMod as DataMod
+import matplotlib.pyplot as plt
 
-# Initialize data and initial value
-data = pd.Series(np.random.randn(1000))
-initial_val = 0
+# Set logging level to INFO
+logging.basicConfig(level=logging.INFO)
 
-# Create an instance of ForecastClass
-forecast = ForecastClass(data, initial_val)
+# Define the path to the data file
+FILE_PATH = r'EURAUD.ifx.csv'
 
-# Set the method to be used for generating the forecast
-forecast.MethodUsed(DataMod.regionChange, use_tend=True, dynamic_change=True)
+# Read the data from the file and drop any missing values
+data = pd.read_csv(FILE_PATH, sep='\t')['<CLOSE>'].dropna()
 
-# Split the data into regions bound on a given value
-forecast.BoundSplit(10)
+# Get the initial value from the data
+initial_val = data.iloc[-1] if isinstance(data, pd.Series) else data[-1]
+
+# Calculate the region size
+region_size = (1/10) * np.ptp(data)
+
+# Define the number of forecasts and the period
+num = 10
+period = 10
+
+# Create an instance of the ForecastClass
+instance = ForecastClass(data, initial_val)
+
+# Split the data based on the bounds
+instance.BoundSplit(region_size)
 
 # Generate the forecast
-forecast.GenerateForecast(10, 10)
+Forecast = instance.GenerateForecast(num, period)
+
+# Convert the forecast to a DataFrame
+frame = pd.DataFrame(Forecast)
+
+# Plot the forecast
+plt.plot(Forecast.T, color='grey')
+plt.show()
+```
+
+This example demonstrates how to use the `ForecastClass` to generate forecasts based on financial time series data. Customize the input parameters, such as the file path, number of forecasts, and forecast period, according to your specific requirements.
