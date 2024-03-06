@@ -2,7 +2,7 @@
 
 ## Overview
 
-The ForecastClass is a Python class designed for generating forecasts based on a given dataset and initial value. 
+The Forecast generator Repository is a Python written repository designed for generating forecasts based on a given dataset and initial value. 
 This class utilizes various methods and splitting strategies to produce accurate forecasts. Below is a guide to help you understand the class and its methods.
 
 ## Installation
